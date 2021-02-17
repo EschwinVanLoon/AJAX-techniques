@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>AJAX en XML opdr4</title>
+		<meta charset="utf-8">
+		<script>
+			function JSONReader(data){
+				var keys = Object.keys(data[0]);
+				
+				html = '<table><tr>';
+				for (k = 0; k < keys.length; k++) {
+					var uCase = keys[k].toUpperCase();
+					var key = uCase.substring(0, 1)+keys[k].substring(1);
+					html += '<th>'+key+'</th>';
+				}	
+				html += '</tr>';					
+				for (i = 0; i < data.length; i++) {
+					html += '<tr>';
+					html += '<td>'+data[i].artist+'</td>';				
+					html += '<td>'+data[i].album+'</td>';
+					html += '<td>'+data[i].released+'</td>';
+					html += '<td>'+data[i].sales+'</td>';
+					html += '</tr>';
+				}
+				html += '</table>';
+				
+				document.getElementById('container').innerHTML = html;
+			}
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function(){
+				if (request.readyState == 4 && request.status == 200){
+					var data = JSON.parse(request.responseText);
+					JSONReader(data);
+				}
+			};
+			request.open("GET", "albums.txt", true);
+			request.send();
+		
+		</script>
+		<style>
+			table, tr, th, td {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+			th, td {
+				padding: 3px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>		
+	</body>
+</html>
